@@ -3,10 +3,10 @@ package com.example.firstmap.Weather;
 import com.google.gson.annotations.SerializedName;
 
 public class WeatherMain {
-    @SerializedName("mTemp")
+    @SerializedName("Temp")
     double mTemp;
-    @SerializedName("mTempMin")
+    @SerializedName("TempMin")
     double mTempMin;
-    @SerializedName("mTempMax")
+    @SerializedName("TempMax")
     double mTempMax;
 }

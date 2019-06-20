@@ -185,7 +185,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     left.setText(data.getJSONArray("weather").getJSONObject(0).getString("main"));
                     double tp =(data.getJSONObject("main").getDouble("temp"))+-273.15;
                     System.out.println(tp);
-                    right.setText(Double.toString(tp));
+                    right.setText(df2.format(tp));
                 } catch (Exception e) {
 
                     System.out.println("Exception "+ e.getMessage());

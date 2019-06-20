@@ -3,8 +3,8 @@ package com.example.firstmap.Weather;
 import com.google.gson.annotations.SerializedName;
 
 public class weather {
-    @SerializedName("mMain")
+    @SerializedName("Main")
     String mMain;
-    @SerializedName("mDescription")
+    @SerializedName("Description")
     String mDescription;
 }
