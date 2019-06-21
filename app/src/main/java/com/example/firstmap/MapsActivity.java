@@ -176,6 +176,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     addresses = geocoder.getFromLocation(x, y, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                 } catch (IOException e) {
                     e.printStackTrace();
+                    let.setText("Please connect to internet");
+                    linearLayout.setVisibility(View.GONE);
+                    return;
                 }
 
 //                addresses.get(0).getAdminArea();
