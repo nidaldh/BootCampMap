@@ -8,10 +8,15 @@ import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.firstmap.Weather.WeatherRespone;
+import com.example.firstmap.Weather.WeatherService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -31,6 +36,13 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback , GoogleMap.OnMarkerClickListener {
     private GoogleMap mMap;
 
@@ -39,7 +51,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     TextView left;
     TextView right;
     Geocoder geocoder;
-
+    ProgressBar progressBar;
+    LinearLayout linearLayout;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -49,6 +62,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         let = findViewById(R.id.id1);
         left = findViewById(R.id.text_view_id2);
         right = findViewById(R.id.text_view_id3);
+        progressBar = findViewById(R.id.progressBar);
+        linearLayout = findViewById(R.id.linear);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -59,6 +74,71 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
     private static DecimalFormat df2 = new DecimalFormat("#.##");
 
+    @SuppressLint("WrongConstant")
+    private void fetchWeather(){
+        progressBar.setVisibility(View.VISIBLE);
+//        left.setVisibility(View.GONE);
+        let.setVisibility(View.GONE);
+//        right.setVisibility(View.GONE);
+        linearLayout.setVisibility(View.GONE);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+
+        //status code header
+        // 200-300 successful
+        //400 bad Request
+        //401/403
+        //500+ servr Error
+        WeatherService service = retrofit.create(WeatherService.class);
+
+        //run the Request
+        service.get("a21a79d3c32d92ebc8f8ee542782377f",Double.toString(x),Double.toString(y)).enqueue(new Callback<WeatherRespone>() {
+            @Override
+            public void onResponse(Call<WeatherRespone> call, Response<WeatherRespone> response) {
+                //TODO: updateUI;
+//                response.body().getmWeather().get(0).getmMain();
+                if (!response.isSuccessful()){
+                    ResponseBody errorBodey = response.errorBody();
+                    try {
+                        Log.d("RESPONSEERROR", errorBodey.string());
+                    } catch (IOException e) {
+//                        e.printStackTrace();
+                    Log.d("RESPONSEERROR",e.getMessage());
+                    }
+                    return;
+                }else {
+                    progressBar.setVisibility(View.GONE);
+//                    left.setVisibility(View.VISIBLE);
+                    let.setVisibility(View.VISIBLE);
+                    linearLayout.setVisibility(View.VISIBLE);
+
+//                    right.setVisibility(View.VISIBLE);
+                        System.out.println(response.body().getmMain().getmTemp());
+                        left.setText(response.body().getmWeather().get(0).getmDescription());
+                        right.setText(df2.format(response.body().getmMain().getmTemp() - 273.15)+"°");
+
+                        //                    response.body().getmMain().getmTemp();
+                }
+
+
+//                System.out.println(response.body().getmWeather().get(0).getmMain());
+//                System.out.println( response.body().toString());
+
+            }
+
+            @Override
+            public void onFailure(Call<WeatherRespone> call, Throwable t) {
+                //TODO: Display Error;
+                Log.d("ad", t.getMessage());
+            }
+        });
+    }
+
+    public double x;
+    public double y;
 
     /**
      * Manipulates the map once available.
@@ -89,13 +169,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 //                let.setText(df2.format(point.latitude)+" || " +df2.format(point.longitude));
 
-                double x = point.latitude;
-                double y = point.longitude;
+                 x = point.latitude;
+                 y = point.longitude;
 
-                LatLng sydney = new LatLng(x, y);
+                LatLng dot = new LatLng(x, y);
 
-                mMap.addMarker(new MarkerOptions().position(sydney).title(""));
-                mMap.animateCamera(CameraUpdateFactory.newLatLng(sydney));
+                mMap.addMarker(new MarkerOptions().position(dot).title(""));
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(dot));
 
 //                txtc.setText(Double.toString(x) + "°");
 //                txtcy.setText(Double.toString(y) + "°");
@@ -111,11 +191,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 String city = addresses.get(0).getLocality();
                 System.out.println(addresses);
                 let.setText(city);
-                if (city!=null)
-                    getJSON(city);
+//                if (city!=null)
+//                    getJSON(city);
 
 //                txtc1.setText(city);
-
+                fetchWeather();
             }
         });
     }
