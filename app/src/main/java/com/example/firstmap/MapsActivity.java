@@ -166,20 +166,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .position(point)
                 );
                 JSONObject data = null;
-
 //                let.setText(df2.format(point.latitude)+" || " +df2.format(point.longitude));
-
                  x = point.latitude;
                  y = point.longitude;
 
                 LatLng dot = new LatLng(x, y);
-
-                mMap.addMarker(new MarkerOptions().position(dot).title(""));
-                mMap.animateCamera(CameraUpdateFactory.newLatLng(dot));
-
-//                txtc.setText(Double.toString(x) + "°");
-//                txtcy.setText(Double.toString(y) + "°");
-
                 List<Address> addresses = null;
                 try {
                     addresses = geocoder.getFromLocation(x, y, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
@@ -187,10 +178,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     e.printStackTrace();
                 }
 
-                addresses.get(0).getAdminArea();
+//                addresses.get(0).getAdminArea();
+                if (addresses==null || addresses.size()==0){
+                    let.setText("UNKNOWN");
+                    linearLayout.setVisibility(View.GONE);
+                    return;
+                }
                 String city = addresses.get(0).getLocality();
+                String countryName = addresses.get(0).getCountryName();
+                String feature = addresses.get(0).getFeatureName();
                 System.out.println(addresses);
-                let.setText(city);
+                if (city!=null) {
+                    if ( countryName == null)
+                        let.setText(city + "," + "Palestine");
+                    else if (countryName.equals("Israel")){
+                        let.setText(city + "," + "Palestine");
+                    }else let.setText(city + "," + countryName);
+                }
+//                else if (city==null & countryName==null & feature!=null){
+//                    let.setText(feature);
+//                }
+                else if (countryName!=null){
+                    if (countryName.equals("Israel"))
+                        let.setText("Palestine");
+                    else {
+                    let.setText(countryName);
+                    }
+                }
+                else {
+                    let.setText("UNKNOWN");
+                    linearLayout.setVisibility(View.GONE);
+                    return;
+                }
+                mMap.addMarker(new MarkerOptions().position(dot).title(""));
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(dot));
 //                if (city!=null)
 //                    getJSON(city);
 
