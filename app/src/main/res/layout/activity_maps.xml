@@ -2,14 +2,12 @@
 
 <LinearLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
 android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight=".05"
@@ -22,7 +20,13 @@ android:layout_height="match_parent"
         android:layout_weight="1"
         android:layout_gravity="center"
         android:visibility="gone"/>
-
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="0dp"
+            android:layout_weight=".05"
+            android:layout_height="wrap_content"
+            android:src="@drawable/log"
+            />
         <TextView
             android:id="@+id/id1"
             android:layout_height="wrap_content"
@@ -31,19 +35,32 @@ android:layout_height="match_parent"
             android:text="let"
             android:textSize="20dp"
             android:gravity="center"/>
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="0dp"
+            android:layout_weight=".05"
+            android:layout_height="wrap_content"
+            android:src="@drawable/search"
+            />
     </LinearLayout>
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight=".05"
         android:orientation="horizontal"
         android:id="@+id/linear">
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".05"
+            android:src="@drawable/clearday" />
+
         <TextView
             android:id="@+id/text_view_id2"
             android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:text="cold"
+            android:text="clear"
             android:textSize="20dp"
             android:layout_weight=".33"
             android:gravity="left"
@@ -54,10 +71,11 @@ android:layout_height="match_parent"
         android:layout_weight=".33"
         android:text="22C"
         android:textSize="20dp"
-
         android:gravity="right"/>
 
+
     </LinearLayout>
+
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -67,4 +85,5 @@ android:layout_height="match_parent"
     android:layout_height="0dp"
         android:layout_weight=".9"
     tools:context=".MapsActivity" />
+
 </LinearLayout>
