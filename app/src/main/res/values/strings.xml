@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">firstMap</string>
     <string name="title_activity_maps">Map</string>
+    <string name="let">let</string>
+    <string name="cold">cold</string>
+    <string name="_22c">22C</string>
 </resources>
